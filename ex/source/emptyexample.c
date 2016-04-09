@@ -41,8 +41,8 @@ int main(void) {
 	Bit 14                                Ignore this
 	Bit 15                                Ignore this
 */
-	unsigned short* contReg = (unsigned short*)0x04000000;
-	contReg[0] = (0 << 0) | (0 << 1)| (0 << 2) | (0 << 6) | (1 << 8) | (1 << 9) | (1 << 10) | (1 << 11) | (0 << 12);
+	// display control register
+	REG_DISPCNT = MODE_0 | (0 << 6) | BG_ALL_ENABLE | (0 << 12);
 /*
 	---BG Layers---
 	Bits 0-1 (reading from right to left)   Layer priority (0-3, with 0 closest to the viewer I think)
@@ -55,16 +55,27 @@ int main(void) {
 	Bit 13                                  Ignore this
 	Bits 14-15                              Screen size setting. Set to 0 for now (256 * 256 pixels)
 */
-	unsigned short* BG0 = (unsigned short*)0x04000008;
-	unsigned short* BG1 = (unsigned short*)0x0400000A;
-	unsigned short* BG2 = (unsigned short*)0x0400000C;
-	unsigned short* BG3 = (unsigned short*)0x0400000E;
+
+	//background control registers
+	REG_BG0CNT = (0 << 0) | (0 << 2) | BG_16_COLOR | (11 << 8)| BG_SIZE_0;
+	REG_BG1CNT = (1 << 0) | (0 << 2) | BG_16_COLOR | (10 << 8)| BG_SIZE_0;
+	REG_BG2CNT = (2 << 0) | (0 << 2) | BG_16_COLOR | (9 << 8) | BG_SIZE_0;
+	REG_BG3CNT = (3 << 0) | (0 << 2) | BG_16_COLOR | (8 << 8) | BG_SIZE_0;
 	
-	BG0[0] = (0 << 0) | (0 << 2) | (0 << 7) | (11 << 8)| (0 << 14) | (0 << 15);
-	BG1[0] = (1 << 0) | (0 << 2) | (0 << 7) | (10 << 8)| (0 << 14) | (0 << 15);
-	BG2[0] = (2 << 0) | (0 << 2) | (0 << 7) | (9 << 8) | (0 << 14) | (0 << 15);
-	BG3[0] = (3 << 0) | (0 << 2) | (0 << 7) | (8 << 8) | (0 << 14) | (0 << 15);
-	
+/*
+	Palettes and colours
+*/
+	u16* pal = BG_PALETTE;
+	//pallette 0
+	pal[0] = RGB5(31,0,0);
+	pal[1] = RGB5(0,31,0);
+	pal[2] = RGB5(0,0,31);
+	pal[3]= RGB5(15,15,15);
+	//pallete 1
+	pal[16] = RGB5(10,10,10);
+	//pallette 2 
+	pal[32] = RGB5(10,10,10);
+	//and so on...
 /*
 	Bits 0-9                A 10-bit number representing the ID of the character to use (0-1024). For example, if in 
 							character memory you wrote ‘a’, ’b’, ’c’ as your first three characters, a value of 2 here would be the ‘c’.
@@ -73,16 +84,16 @@ int main(void) {
 	Bits 12-15           	A 4-bit number indicating the colour palette to use for this character (0-15).
 */
 	unsigned short* ScreenBG0 = (unsigned short*)0x6005800;// Map Base Adress, can be found in map view
-	ScreenBG0[(0 * 32) + 0] = (77 << 0)| (0 << 10) | (0 << 11) | (0 << 12);
+	ScreenBG0[(0 * 32) + 0] = (77 << 0)| (0 << 10) | (0 << 11) | CHAR_PALETTE(0);
 
 	unsigned short* ScreenBG1 = (unsigned short*)0x6005000;// Map Base Adress, can be found in map view
-	ScreenBG1[(0 * 32) + 0] = (78 << 0)| (0 << 10) | (0 << 11) | (0 << 12);
+	ScreenBG1[(0 * 32) + 0] = (78 << 0)| (0 << 10) | (0 << 11) | CHAR_PALETTE(0);
 
 	unsigned short* ScreenBG2 = (unsigned short*)0x6004800;	// Map Base Adress, can be found in map view
-	ScreenBG2[(0 * 32) + 0] = (79 << 0)| (0 << 10) | (0 << 11) | (0 << 12);
+	ScreenBG2[(0 * 32) + 0] = (79 << 0)| (0 << 10) | (0 << 11) | CHAR_PALETTE(0);
 
 	unsigned short* ScreenBG3 = (unsigned short*)0x6004000;// Map Base Adress, can be found in map view
-	ScreenBG3[(0 * 32) + 0] = (1 << 0)| (0 << 10) | (0 << 11) | (0 << 12);
+	ScreenBG3[(0 * 32) + 0] = (1 << 0)| (0 << 10) | (0 << 11) | CHAR_PALETTE(0);
 
 	
 	
