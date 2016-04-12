@@ -128,7 +128,7 @@ $(OUTPUT).gba	:	$(OUTPUT).elf
 
 $(OUTPUT).elf	:	$(OFILES)
 
-%.o	:	%.pcx
+%.splash.pcx.o	:	%.pcx
 	@echo $(notdir $<)
 	@$(bin2o)
 
