@@ -1,0 +1,90 @@
+﻿Build started 13/04/2016 14:39:20.
+     1>Project "D:\GBA\GBA-coursework\ex\source\source.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TC /analyze- /errorReport:prompt background.c emptyexample.c
+         emptyexample.c
+     1>d:\devkitpro\libgba\include\gba_video.h(116): error C2054: expected '(' to follow 'inline'
+     1>d:\devkitpro\libgba\include\gba_video.h(116): error C2085: 'VCOUNT' : not in formal parameter list
+     1>d:\devkitpro\libgba\include\gba_video.h(116): error C2143: syntax error : missing ';' before '{'
+     1>d:\devkitpro\libgba\include\gba_video.h(296): error C2054: expected '(' to follow 'inline'
+     1>d:\devkitpro\libgba\include\gba_video.h(296): error C2085: 'SetMode' : not in formal parameter list
+     1>d:\devkitpro\libgba\include\gba_video.h(296): error C2143: syntax error : missing ';' before '{'
+     1>d:\devkitpro\libgba\include\gba_interrupt.h(110): error C2061: syntax error : identifier '__attribute__'
+     1>d:\devkitpro\libgba\include\gba_interrupt.h(110): error C2059: syntax error : ';'
+     1>d:\devkitpro\libgba\include\gba_interrupt.h(110): error C2182: 'deprecated' : illegal use of type 'void'
+     1>d:\devkitpro\libgba\include\gba_interrupt.h(119): error C2061: syntax error : identifier '__attribute__'
+     1>d:\devkitpro\libgba\include\gba_interrupt.h(119): error C2059: syntax error : ';'
+     1>d:\devkitpro\libgba\include\gba_interrupt.h(119): error C2373: 'deprecated' : redefinition; different type modifiers
+                 d:\devkitpro\libgba\include\gba_interrupt.h(110) : see declaration of 'deprecated'
+     1>d:\devkitpro\libgba\include\gba_interrupt.h(126): error C2061: syntax error : identifier '__attribute__'
+     1>d:\devkitpro\libgba\include\gba_interrupt.h(126): error C2059: syntax error : ';'
+     1>d:\devkitpro\libgba\include\gba_interrupt.h(126): error C2182: 'deprecated' : illegal use of type 'void'
+     1>d:\devkitpro\libgba\include\gba_interrupt.h(134): error C2061: syntax error : identifier '__attribute__'
+     1>d:\devkitpro\libgba\include\gba_interrupt.h(134): error C2059: syntax error : ';'
+     1>d:\devkitpro\libgba\include\gba_interrupt.h(134): error C2182: 'deprecated' : illegal use of type 'void'
+     1>d:\devkitpro\libgba\include\gba_systemcalls.h(96): error C2054: expected '(' to follow 'inline'
+     1>d:\devkitpro\libgba\include\gba_systemcalls.h(96): error C2085: 'Halt' : not in formal parameter list
+     1>d:\devkitpro\libgba\include\gba_systemcalls.h(96): error C2143: syntax error : missing ';' before '{'
+     1>d:\devkitpro\libgba\include\gba_systemcalls.h(97): error C2054: expected '(' to follow 'inline'
+     1>d:\devkitpro\libgba\include\gba_systemcalls.h(97): error C2085: 'Stop' : not in formal parameter list
+     1>d:\devkitpro\libgba\include\gba_systemcalls.h(97): error C2143: syntax error : missing ';' before '{'
+     1>d:\devkitpro\libgba\include\gba_systemcalls.h(100): error C2054: expected '(' to follow 'inline'
+     1>d:\devkitpro\libgba\include\gba_systemcalls.h(100): error C2085: 'BiosCheckSum' : not in formal parameter list
+     1>d:\devkitpro\libgba\include\gba_systemcalls.h(100): error C2143: syntax error : missing ';' before '{'
+     1>d:\devkitpro\libgba\include\gba_systemcalls.h(185): error C2054: expected '(' to follow 'inline'
+     1>d:\devkitpro\libgba\include\gba_systemcalls.h(185): error C2085: 'VBlankIntrWait' : not in formal parameter list
+     1>d:\devkitpro\libgba\include\gba_systemcalls.h(185): error C2143: syntax error : missing ';' before '{'
+     1>d:\devkitpro\libgba\include\gba_sprites.h(39): error C2143: syntax error : missing ')' before '('
+     1>d:\devkitpro\libgba\include\gba_sprites.h(39): error C2091: function returns function
+     1>d:\devkitpro\libgba\include\gba_sprites.h(39): error C2143: syntax error : missing ')' before 'constant'
+     1>d:\devkitpro\libgba\include\gba_sprites.h(39): error C2143: syntax error : missing '{' before 'constant'
+     1>d:\devkitpro\libgba\include\gba_sprites.h(39): error C2059: syntax error : 'constant'
+     1>d:\devkitpro\libgba\include\gba_sprites.h(39): error C2059: syntax error : ')'
+     1>d:\devkitpro\libgba\include\gba_sprites.h(44): error C2143: syntax error : missing ')' before '('
+     1>d:\devkitpro\libgba\include\gba_sprites.h(44): error C2091: function returns function
+     1>d:\devkitpro\libgba\include\gba_sprites.h(44): error C2143: syntax error : missing ')' before 'constant'
+     1>d:\devkitpro\libgba\include\gba_sprites.h(44): error C2143: syntax error : missing '{' before 'constant'
+     1>d:\devkitpro\libgba\include\gba_sprites.h(44): error C2059: syntax error : 'constant'
+     1>d:\devkitpro\libgba\include\gba_sprites.h(44): error C2059: syntax error : ')'
+     1>d:\devkitpro\libgba\include\gba_sprites.h(55): error C2143: syntax error : missing ')' before '('
+     1>d:\devkitpro\libgba\include\gba_sprites.h(55): error C2091: function returns function
+     1>d:\devkitpro\libgba\include\gba_sprites.h(55): error C2143: syntax error : missing ')' before 'constant'
+     1>d:\devkitpro\libgba\include\gba_sprites.h(55): error C2143: syntax error : missing '{' before 'constant'
+     1>d:\devkitpro\libgba\include\gba_sprites.h(55): error C2059: syntax error : 'constant'
+     1>d:\devkitpro\libgba\include\gba_sprites.h(55): error C2059: syntax error : ')'
+     1>d:\devkitpro\libgba\include\gba_dma.h(86): error C2054: expected '(' to follow 'inline'
+     1>d:\devkitpro\libgba\include\gba_dma.h(86): error C2085: 'dmaCopy' : not in formal parameter list
+     1>d:\devkitpro\libgba\include\gba_dma.h(86): error C2143: syntax error : missing ';' before '{'
+     1>d:\gba\gba-coursework\ex\source\menu.h(17): error C2061: syntax error : identifier '__attribute__'
+     1>d:\gba\gba-coursework\ex\source\menu.h(17): error C2059: syntax error : ';'
+     1>d:\gba\gba-coursework\ex\source\menu.h(17): error C2143: syntax error : missing ')' before 'constant'
+     1>d:\gba\gba-coursework\ex\source\menu.h(2720): error C2061: syntax error : identifier '__attribute__'
+     1>d:\gba\gba-coursework\ex\source\menu.h(2720): error C2059: syntax error : ';'
+     1>d:\gba\gba-coursework\ex\source\menu.h(2720): error C2143: syntax error : missing ')' before 'constant'
+     1>d:\gba\gba-coursework\ex\source\emptyexample.c(58): warning C4013: 'VBlankIntrWait' undefined; assuming extern returning int
+     1>d:\gba\gba-coursework\ex\source\emptyexample.c(90): error C2065: 'menuPal' : undeclared identifier
+     1>d:\gba\gba-coursework\ex\source\emptyexample.c(90): error C2109: subscript requires array or pointer type
+     1>d:\gba\gba-coursework\ex\source\emptyexample.c(96): error C2065: 'menuBitmap' : undeclared identifier
+     1>d:\gba\gba-coursework\ex\source\emptyexample.c(96): error C2109: subscript requires array or pointer type
+     1>d:\gba\gba-coursework\ex\source\emptyexample.c(96): error C2198: 'PlotPixel' : too few arguments for call
+     1>d:\gba\gba-coursework\ex\source\emptyexample.c(183): error C2036: 'void *' : unknown size
+     1>d:\gba\gba-coursework\ex\source\emptyexample.c(201): error C2036: 'void *' : unknown size
+     1>d:\gba\gba-coursework\ex\source\emptyexample.c(220): error C2065: 'OBJATTR' : undeclared identifier
+     1>d:\gba\gba-coursework\ex\source\emptyexample.c(220): error C2059: syntax error : ')'
+     1>d:\gba\gba-coursework\ex\source\emptyexample.c(263): warning C4013: 'dmaCopy' undefined; assuming extern returning int
+         background.c
+     1>d:\gba\gba-coursework\ex\source\background.c(18): error C2061: syntax error : identifier '__attribute__'
+     1>d:\gba\gba-coursework\ex\source\background.c(18): error C2059: syntax error : ';'
+     1>d:\gba\gba-coursework\ex\source\background.c(18): error C2143: syntax error : missing ')' before 'constant'
+     1>d:\gba\gba-coursework\ex\source\background.c(1137): error C2061: syntax error : identifier '__attribute__'
+     1>d:\gba\gba-coursework\ex\source\background.c(1137): error C2059: syntax error : ';'
+     1>d:\gba\gba-coursework\ex\source\background.c(1137): error C2143: syntax error : missing ')' before 'constant'
+     1>d:\gba\gba-coursework\ex\source\background.c(1284): error C2061: syntax error : identifier '__attribute__'
+     1>d:\gba\gba-coursework\ex\source\background.c(1284): error C2059: syntax error : ';'
+     1>d:\gba\gba-coursework\ex\source\background.c(1284): error C2143: syntax error : missing ')' before 'constant'
+         Generating Code...
+     1>Done Building Project "D:\GBA\GBA-coursework\ex\source\source.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:00.84
