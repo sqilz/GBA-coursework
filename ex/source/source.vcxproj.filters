@@ -27,6 +27,9 @@
     <ClCompile Include="background2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="drawing.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="background.h">
@@ -36,6 +39,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="background2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="drawing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

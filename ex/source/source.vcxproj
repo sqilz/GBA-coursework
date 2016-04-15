@@ -76,11 +76,13 @@
   <ItemGroup>
     <ClCompile Include="background.c" />
     <ClCompile Include="background2.c" />
+    <ClCompile Include="drawing.c" />
     <ClCompile Include="emptyexample.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="background.h" />
     <ClInclude Include="background2.h" />
+    <ClInclude Include="drawing.h" />
     <ClInclude Include="menu.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

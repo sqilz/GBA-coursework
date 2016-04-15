@@ -1,20 +1,16 @@
-
 #include <gba_console.h>
 #include <gba_video.h>
 #include <gba_interrupt.h>
 #include <gba_systemcalls.h>
 #include <gba_sprites.h>
 #include <gba_input.h>
-#include <gba_dma.h>
-#include <gba_types.h>
-
-
+#include <stdio.h>
+#include <stdlib.h>
 #include "menu.h"
 #include "background.h"
 #include "background2.h"
+#include "drawing.h"
 
-#define VID_BUFFER ((u16*)0x0600A000)
-#define IMG_PALETTE (BG_PALETTE )
 //---------------------------------------------------------------------------------
 // Program entry point
 //---------------------------------------------------------------------------------
@@ -22,29 +18,23 @@ u16 test = 50;
 u16 test2 = 30;
 int flowerHoff, bgHoff;
 int menu(int y);
-int game(int a,int b);
+int game(int a,int b, int c, int d);
 enum { SPLASH, GAME };
-
-void PlotPixel(int x,int y, unsigned short int c) 
-{
-	VID_BUFFER[(y) *120 + (x)] = (c);
-}
-
-//extern void PlotPixels();
-
-typedef struct
-{
-	const u16* tileData;
-	const u16* mapData;
-	const u16* palData;	
-	int tileLength;
-	int mapLength;
-	int palLength;
-} Background;
 
 Background background1 = {backgroundTiles, backgroundMap, backgroundPal, backgroundTilesLen, backgroundMapLen, backgroundPalLen };
 Background bg_flowers = {background2Tiles, background2Map, background2Pal, background2TilesLen, background2MapLen, background2PalLen };
-void setBG(Background* back, int screenBaseBlock, int charBaseBlock, bool pal);
+
+typedef struct
+{
+	int x;
+	int y;
+}Enemy;
+typedef struct
+{
+	int x;
+	int y;
+}Character;
+
 int main(void) 
 {
 //---------------------------------------------------------------------------------
@@ -55,7 +45,9 @@ int main(void)
 	int c =0;
 	// generic setup function
 	consoleDemoInit();
-int state = 1;
+	int state = 1;		
+	Enemy enemy = { enemy.x = 90, enemy.y = 40 };
+	Character character = { character.x = 10, character.y = 50};
 	// main loop
 	while (1) 
 	{
@@ -71,15 +63,18 @@ int state = 1;
 				//	if(down & KEY_UP) c+=10;
 				//	if(down & KEY_DOWN) c-=10;
 				if(down & KEY_START) state = GAME;
+				
 			break;
 			
 			case GAME:
-				game(test,test2);
-				if(keys & KEY_UP)	 test-= 1;
-				if(keys & KEY_DOWN)		test+=1;
-				if(keys & KEY_RIGHT) test2+=1;
-				if(keys & KEY_LEFT)  test2-=1;
+				game(character.x,character.y, enemy.x, enemy.y); 
+				//character and enemy movement updating, and sending to 
+				if(keys & KEY_UP)	 character.y-= 1;
+				if(keys & KEY_DOWN)	 character.y+=1;
 				if(down & KEY_START) state = SPLASH;
+				
+				enemy.x -= 1;
+				
 			break;
 		}
 	}
@@ -89,10 +84,12 @@ int menu(int c)
 	u16 down = keysDown();
 	int x, y, loop; // variables
 
-	REG_DISPCNT = (1<<4) | MODE_4 | BG2_ENABLE; // switch to mode4
-	for(loop = 0; loop < 256; loop++)	// put pal in memory
+	// switch to mode4
+	REG_DISPCNT = (1<<4) | MODE_4 | BG2_ENABLE; 
+	// put palette in memory
+	for(loop = 0; loop < 256; loop++)	
 		IMG_PALETTE[loop] = menuPal[loop];	
-		// draw the picture
+		// draws the menu bitmap
 		for(y = 0; y < 160; y++)
 		{
 			for(x = 0; x < 120; x++)
@@ -100,37 +97,31 @@ int menu(int c)
 				PlotPixel(x,y,menuBitmap[y*120+x]);
 			}
 		}
-		
+	// moves from menu state to game once pressed
 	if(down & KEY_START) return 1;
 	
 		return 0;	
 }
-int game(int a, int b)
+int game(int characterX, int characterY, int enemyX, int enemyY)
 {
-	
-	REG_DISPCNT = MODE_0 | OBJ_1D_MAP | BG0_ENABLE| BG1_ENABLE| OBJ_ENABLE;
-
-	
+	// display control register
+	REG_DISPCNT = MODE_0 | OBJ_1D_MAP | BG_ALL_ENABLE | OBJ_ENABLE;
 	//background control registers
 	REG_BG0CNT = (3 << 0) | (2 << 2) | BG_256_COLOR | (30 << 8) | BG_SIZE_0;
 	REG_BG0HOFS = 0;
 	REG_BG1CNT = (2 << 0) | (3 << 2) | BG_256_COLOR | (31 << 8) | BG_SIZE_0;
 	REG_BG1HOFS = 0;
 	REG_BG2CNT = (1 << 0) | (0 << 2) | BG_16_COLOR | (9 << 8) | BG_SIZE_0;
-	REG_BG3CNT = (0 << 0) | (0 << 2) | BG_16_COLOR | (8 << 8) | BG_SIZE_0;
-	
+	REG_BG3CNT = (0 << 0) | (0<< 2) | BG_16_COLOR |(8 << 8) | BG_SIZE_0;
+	// setting and moving background and flowers layer
 	setBG(&background1, 30, 2, 1);
 	setBG(&bg_flowers, 31, 3,0);
 	bgHoff += 1;
 	flowerHoff += 2;
 	REG_BG0HOFS = bgHoff/2;
 	REG_BG1HOFS = flowerHoff;
+
 	u16* pal = BG_PALETTE;
-	//pallette 0
-	//pal[0] = RGB5(9,19,26); // transparent default blue, background
-	//pal[1] = RGB5(0,31,0);
-	//pal[2] = RGB5(0,0,31);
-	//pal[3] = RGB5(15,15,15);
 	//pallete 1
 	pal[16] = RGB5(31,9,9);
 	pal[17] = RGB5(24,7,7);
@@ -148,6 +139,10 @@ int game(int a, int b)
 	pal[29] = RGB5(10,10,10);
 	pal[30] = RGB5(10,10,10);
 	pal[31] = RGB5(10,10,10);
+	// -- Base block 0.
+	//first character tile. for clearing screen i think, without this squares show on screen
+	u32* first = (u32*)0x06000000;
+	for (int c = 0; c<8; c++) first[c] = 0;
 
 	//pallette 2 
 	pal[32] = RGB5(10,10,10);
@@ -170,23 +165,18 @@ int game(int a, int b)
 	obj[13] = RGB5(4,4,4);		// dark grey
 	obj[14] = RGB5(0,0,0);
 	obj[15] = RGB5(31,21,10);
-	
-	u16* ScreenBG0 = (u16*)0x06005800;// Map Base Adress, can be found in map view
-	ScreenBG0[(1 * 32) + 0] = (77 << 0)| (0 << 10) | (0 << 11) | CHAR_PALETTE(1);
+	obj[16] = RGB5(3, 7, 8);
+	obj[17] = RGB5(3, 7, 8);
+	obj[18] = RGB5(2, 14, 9);
+	obj[19] = RGB5(0, 24, 7);
 
-	u16* ScreenBG1 = (u16*)0x06005000;// Map Base Adress, can be found in map view
-	ScreenBG1[(0 * 32) + 1] = (78 << 0)| (0 << 10) | (0 << 11) | CHAR_PALETTE(1);
-
-	u16* ScreenBG2 = (u16*)0x06004800;	// Map Base Adress, can be found in map view
-	ScreenBG2[(0 * 32) + 2] = (79 << 0)| (0 << 10) | (0 << 11) | CHAR_PALETTE(1);
-
-	u16* ScreenBG3 = (u16*)0x06004000;// Map Base Adress, can be found in map view
-	ScreenBG3[(0 * 32) + 3] = (1 << 0)| (0 << 10) | (0 << 11) | CHAR_PALETTE(1);
-		
+	char str[] = "";
+	sprintf(str,"%d", enemyX);
+	drawString(90, 1, str);
+	drawString(84, 1, "Score ");
 	// sprite 0 
 	u32* firstSprite = OBJ_BASE_ADR; //sprite memory at tile 0
 	for(int c=0; c<8;c++)	firstSprite[c] = 0;		// makes the first sprite blank
-
 	
 	// sprite 0 
 	u32* sprite = OBJ_BASE_ADR + (0x20*1); // sprite memory location at tile x - OBJ_BASE_ADR + (0x20 * x)
@@ -226,58 +216,89 @@ int game(int a, int b)
 	sprite2[15] = (0 << 0) | (11 << 4) | (11 << 8) | (0 << 12) | (11 << 16) | (11 << 20) | (0 << 24) | (0 << 28);
 	
 	
-	u16* oam = (u16*)OAM;
-	oam[0] = OBJ_Y(a) | OBJ_SHAPE(2);
-	oam[1] = OBJ_X(b) | ATTR1_SIZE_8;
-	oam[2] = (1<<0) | ATTR2_PRIORITY(0) | ATTR2_PALETTE(0);
-	oam[3] = 0;
-	
+	u32* sprite3 = OBJ_BASE_ADR + (0x20 * 5); // sprite memory location at tile x - OBJ_BASE_ADR + (0x20 * x)
+	// tile 1
+	sprite3[0] = (1 << 12) | (1 << 16);
+	sprite3[1] = (1 << 8) | (1 << 12) | (1 << 16);
+	sprite3[2] = (1 << 8) | (1 << 12) | (1 << 16) | (1 << 20) | (1 << 24);
+	sprite3[3] = (1 << 4) | (1 << 8) | (2 << 12) | (2 << 16) | (1 << 20) | (1 << 24) | (1 << 28);
+	sprite3[4] = (1 << 0) | (2 << 4) | (2 << 8) | (2 << 12) | (2 << 16) | (2 << 20) | (1 << 24) | (1 << 28);
+	sprite3[5] = (1 << 0) | (2 << 4) | (2 << 8) | (2 << 12) | (3 << 16) | (2 << 20) | (2 << 24) | (2 << 28);
+	sprite3[6] = (1 << 0) | (2 << 4) | (2 << 8) | (2 << 12) | (3 << 16) | (2 << 20) | (2 << 24) | (2 << 28);
+	sprite3[7] = (1 << 0) | (2 << 4) | (2 << 8) | (2 << 12) | (2 << 16) | (2 << 20) | (2 << 24) | (2 << 28);
+	// tile 2
+	sprite3[8] = (1 << 12) | (1 << 16);
+	sprite3[9] = (1 << 12) | (1 << 16) | (1 << 20);
+	sprite3[10] = (1 << 4) | (1 << 8) | (1 << 12) | (1 << 16) | (1 << 20);
+	sprite3[11] = (1 << 0) | (1 << 4) | (1 << 8) | (2 << 12) | (2 << 16) | (1 << 20) | (1 << 24);
+	sprite3[12] = (1 << 0) | (1 << 4) | (2 << 8) | (2 << 12) | (2 << 16) | (2 << 20) | (2 << 24) | (1 << 28);
+	sprite3[13] = (2 << 0) | (2 << 4) | (2 << 8) | (3 << 12) | (2 << 16) | (2 << 20) | (2 << 24) | (1 << 28);
+	sprite3[14] = (2 << 0) | (2 << 4) | (2 << 8) | (3 << 12) | (2 << 16) | (2 << 20) | (2 << 24) | (1 << 28);
+	sprite3[15] = (2 << 0) | (2 << 4) | (2 << 8) | (2 << 12) | (2 << 16) | (2 << 20) | (2 << 24) | (1 << 28);
+	// tile 3
+	sprite3[16] = (1 << 4) | (2 << 8) | (2 << 12) | (2 << 16) | (2 << 20) | (2 << 24) | (2 << 28);
+	sprite3[17] = (1 << 4) | (2 << 8) | (2 << 12) | (3 << 16) | (3 << 20) | (3 << 24) | (3 << 28);
+	sprite3[18] = (1 << 8) | (2 << 12) | (2 << 16) | (2 << 20) | (2 << 24) | (3 << 28);
+	sprite3[19] = (1 << 8) | (2 << 12) | (2 << 16) | (2 << 20) | (2 << 24) | (2 << 28);
+	sprite3[20] = (1 << 12) | (2 << 16) | (2 << 20) | (2 << 24) | (2 << 28);
+	sprite3[21] = (1 << 16) | (1 << 20) | (2 << 24) | (2 << 28);
+	sprite3[22] = (1 << 24) | (2 << 28);
+	sprite3[23] = (1 << 28);
+	// tile 4
+	sprite3[24] = (2 << 0) | (2 << 4) | (2 << 8) | (2 << 12) | (2 << 16) | (2 << 20) | (1 << 24);
+	sprite3[25] = (3 << 0) | (3 << 4) | (3 << 8) | (3 << 12) | (2 << 16) | (2 << 20) | (1 << 24);
+	sprite3[26] = (3 << 0) | (2 << 4) | (2 << 8) | (2 << 12) | (2 << 16) | (1 << 20);
+	sprite3[27] = (2 << 0) | (2 << 4) | (2 << 8) | (2 << 12) | (2 << 16) | (1 << 20);
+	sprite3[28] = (2 << 0) | (2 << 4) | (2 << 8) | (2 << 12) | (1 << 16);
+	sprite3[29] = (2 << 0) | (2 << 4) | (1 << 8) | (1 << 12);
+	sprite3[30] = (2 << 0) | (1 << 4);
+	sprite3[31] = (1 << 0);
 
-		
-	
+
+	u16* oam = (u16*)OAM;
+	oam[0] = OBJ_Y(characterY) | OBJ_SHAPE(2);
+	oam[1] = OBJ_X(characterX) | ATTR1_SIZE_8;
+	oam[2] = (1<<0) | ATTR2_PRIORITY(0) | ATTR2_PALETTE(0);
+	oam[3] = 0;	
+
 	oam[4] = OBJ_Y(60) | OBJ_SHAPE(2);
 	oam[5] = OBJ_X(40) | ATTR1_SIZE_8;
 	oam[6] = (3<<0) | ATTR2_PRIORITY(0) | ATTR2_PALETTE(0);
 	oam[7] = 0;
-	
-	// -- Base block 0
-	u32* first = (u32*)0x06000000;
-	first[0] = 0;
-	first[1] = 0;
-	first[2] = 0;
-	first[3] = 0;
-	first[4] = 0;
-	first[5] = 0;
-	first[6] = 0;
-	first[7] = 0;
 
-	u32* character = (u32*)0x06000020;
-	character[0] = (1 << 12);
-	character[1] = (1 << 8) | (1 << 16);
-	character[2] = (1 << 12);
-	character[3] = (1 << 8) | (1 << 12);
-	character[4] = (1 << 4) | (1 << 16);
-	character[5] = (1 << 4) | (1 << 20);
-	character[6] = (1 << 4) | (1 << 20);
-	character[7] = (1 << 8) | (1 << 16);
-	
-		
-		
-		return 0;
+	oam[8] = OBJ_Y(enemyY) | OBJ_SHAPE(0);
+	oam[9] = OBJ_X(enemyX) | ATTR1_SIZE_16;
+	oam[10] = (5 << 0) | ATTR2_PRIORITY(0) | ATTR2_PALETTE(1);
+	oam[11] = 0;
 
+	oam[12] = OBJ_Y(enemyY+20) | OBJ_SHAPE(0);
+	oam[13] = OBJ_X(enemyX+20) | ATTR1_SIZE_16;
+	oam[14] = (5 << 0) | ATTR2_PRIORITY(0) | ATTR2_PALETTE(1);
+	oam[15] = 0;
+
+	oam[16] = OBJ_Y(enemyY + 130) | OBJ_SHAPE(0);
+	oam[17] = OBJ_X(enemyX + 30) | ATTR1_SIZE_16;
+	oam[18] = (5 << 0) | ATTR2_PRIORITY(0) | ATTR2_PALETTE(1);
+	oam[19] = 0;
+
+	oam[20] = OBJ_Y(enemyY + 240) | OBJ_SHAPE(0);
+	oam[21] = OBJ_X(enemyX + 40) | ATTR1_SIZE_16;
+	oam[22] = (5 << 0) | ATTR2_PRIORITY(0) | ATTR2_PALETTE(1);
+	oam[23] = 0;
+
+	oam[24] = OBJ_Y(enemyY + 350) | OBJ_SHAPE(0);
+	oam[25] = OBJ_X(enemyX + 50) | ATTR1_SIZE_16;
+	oam[26] = (5 << 0) | ATTR2_PRIORITY(0) | ATTR2_PALETTE(1);
+	oam[27] = 0;
+
+	oam[28] = OBJ_Y(enemyY +460) | OBJ_SHAPE(0);
+	oam[29] = OBJ_X(enemyX + 70) | ATTR1_SIZE_16;
+	oam[30] = (5 << 0) | ATTR2_PRIORITY(0) | ATTR2_PALETTE(1);
+	oam[31] = 0;
+	
+	return 0;
 }
 
-void setBG(Background* back, int screenBaseBlock, int charBaseBlock, bool pal) {
-    // tile image storing
-	dmaCopy(back->tileData, (u16*)CHAR_BASE_BLOCK(charBaseBlock), back->tileLength);
 
-	// map storing
-	dmaCopy(back->mapData, (u16*)SCREEN_BASE_BLOCK(screenBaseBlock), back->mapLength);
-	
-	if (pal) {
-		// palette storing
-		dmaCopy(back->palData, BG_PALETTE, back->palLength);
-	}
-}
 
 
