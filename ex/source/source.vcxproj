@@ -72,17 +72,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="asm.s" />
+    <None Include="palettes.s" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="background.c" />
     <ClCompile Include="background2.c" />
     <ClCompile Include="drawing.c" />
     <ClCompile Include="emptyexample.c" />
+    <ClCompile Include="lost.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="background.h" />
     <ClInclude Include="background2.h" />
     <ClInclude Include="drawing.h" />
+    <ClInclude Include="lost.h" />
     <ClInclude Include="menu.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="asm.s" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="background.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -28,6 +25,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="drawing.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lost.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -44,5 +44,16 @@
     <ClInclude Include="drawing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="lost.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="asm.s">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="palettes.s">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

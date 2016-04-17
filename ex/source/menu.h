@@ -14,7 +14,7 @@
 //
 //======================================================================
 
-const unsigned short menuBitmap[19200] __attribute__((aligned(4)))=
+const unsigned short menuBitmap[] __attribute__((aligned(4)))=
 {
 	0x0808,0x0808,0x0000,0x0000,0x0000,0x0804,0x0808,0x0808,
 	0x0808,0x0808,0x0808,0x0808,0x0808,0x0808,0x0808,0x0000,

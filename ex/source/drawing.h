@@ -19,5 +19,6 @@ typedef struct
 
 void PlotPixel(int row, int col, u16 colour);
 void setBG(Background* back, int screenBaseBlock, int charBaseBlock, bool pal);
+void drawBitmap(const u16 *bitmapData, const u16 * paletteData);
 void drawString(int x, int y, char str[]);
 

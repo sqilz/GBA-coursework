@@ -20,9 +20,25 @@ void setBG(Background* back, int screenBaseBlock, int charBaseBlock, bool pal) {
 	}
 }
 
+void drawBitmap(const u16 *bitmapData, const u16 * paletteData)
+{
+	int x, y, loop;
+	// put palette in memory
+	for (loop = 0; loop < 256; loop++)
+		IMG_PALETTE[loop] = paletteData[loop];
+
+	// draws the menu bitmap
+	for (y = 0; y < 160; y++)
+	{
+		for (x = 0; x < 120; x++)
+		{
+			PlotPixel(x, y, bitmapData[y * 120 + x]);
+		}
+	}
+}
+
 void drawString(int x, int y, char str[])
 {
-
 	//BG3 layer adress
 	u16* ScreenBG3 = (u16*)0x06004000;
 
